@@ -12,7 +12,7 @@ import {
 import { EventIdDto } from './dto/event-id.dto';
 import { EventCreateDto } from './dto/event-create.dto';
 import { EventUpdateDto } from './dto/event-update.dto';
-import { Event } from './event-entity';
+import { Event } from './event.entity';
 import { Like, MoreThan, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SubtractSixMonthsPipe } from './pipe/subtract-six-months.pipe';
