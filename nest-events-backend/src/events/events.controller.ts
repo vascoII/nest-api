@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
   NotFoundException,
+  Logger,
 } from '@nestjs/common';
 import { EventIdDto } from './dto/event-id.dto';
 import { EventCreateDto } from './dto/event-create.dto';
@@ -24,9 +25,15 @@ export class EventsController {
     private readonly repository: Repository<Event>,
   ) {}
 
+  private readonly logger = new Logger(EventsController.name);
+
   @Get()
   async findall() {
-    return await this.repository.find();
+    this.logger.log('Hit the findAll route');
+    const events = await this.repository.find();
+    this.logger.debug(`Found ${events.length} events`);
+
+    return events;
   }
 
   @Get('/practice')
