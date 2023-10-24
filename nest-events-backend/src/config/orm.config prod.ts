@@ -1,5 +1,5 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { Event } from '../events/event.entity';
+import { Event } from '../events/entity/event.entity';
 import { registerAs } from '@nestjs/config';
 
 export default registerAs(

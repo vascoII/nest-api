@@ -4,28 +4,26 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
+import { Event } from './event.entity';
 
 @Entity()
-export class Event {
+export class Attendee {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
   @Column()
   name: string;
 
-  @Column()
-  description: string;
-
-  @Column()
-  when: Date;
-
-  @Column()
-  address: string;
-
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @ManyToOne(() => Event, (event) => event.attendees, { nullable: false })
+  //@JoinColumn({ name: 'event_id' })
+  event: Event;
 }
