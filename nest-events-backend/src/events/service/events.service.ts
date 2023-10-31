@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Event } from '../entity/event.entity';
 import { AttendeeAnswerEnum } from '../entity/attendee.entity';
+import { ListEvents, WhenEventFilter } from '../dto/list.events';
 
 @Injectable()
 export class EventsService {
@@ -67,5 +68,37 @@ export class EventsService {
     this.logger.debug(query.getSql());
 
     return await query.getOne();
+  }
+
+  public async getEventsWithAttendeeCountFiltered(
+    filter?: ListEvents,
+  ): Promise<Event[] | undefined> {
+    let query = this.getEventsWithAttendeeCountQuery();
+
+    if (!filter) {
+      return await query.getMany();
+    }
+
+    if (filter.when) {
+      if (filter.when == WhenEventFilter.Today) {
+        query = query.andWhere(
+          'e.when <= CURDATE() and e.when >= CURDATE() + INTERVAL 1 DAY',
+        );
+      } else if (filter.when == WhenEventFilter.Tommorow) {
+        query = query.andWhere(
+          'e.when <= CURDATE() + INTERVAL 1 DAY and e.when >= CURDATE() + INTERVAL 2 DAY',
+        );
+      } else if (filter.when == WhenEventFilter.ThisWeek) {
+        query = query.andWhere('YEARWEEK(e.when, 1) = YEARWEEK(CURDATE(), 1)');
+      } else if (filter.when == WhenEventFilter.NextWeek) {
+        query = query.andWhere(
+          'YEARWEEK(e.when, 1) = YEARWEEK(CURDATE(), 1) + 1',
+        );
+      }
+    }
+
+    this.logger.debug(query.getSql());
+
+    return await query.getMany();
   }
 }

@@ -9,6 +9,7 @@ import {
   Post,
   NotFoundException,
   Logger,
+  Query,
 } from '@nestjs/common';
 import { EventIdDto } from './dto/event-id.dto';
 import { EventCreateDto } from './dto/event-create.dto';
@@ -19,6 +20,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { SubtractSixMonthsPipe } from './pipe/subtract-six-months.pipe';
 import { Attendee } from './entity/attendee.entity';
 import { EventsService } from './service/events.service';
+import { ListEvents, WhenEventFilter } from './dto/list.events';
 
 @Controller('/events')
 export class EventsController {
@@ -33,9 +35,14 @@ export class EventsController {
   private readonly logger = new Logger(EventsController.name);
 
   @Get()
-  async findall() {
-    this.logger.log('Hit the findAll route');
-    const events = await this.repository.find();
+  async findall(@Query('when') when: WhenEventFilter) {
+    const filter: ListEvents = { when };
+    const filterString = JSON.stringify(filter); // Convert filter to a JSON string
+    this.logger.log(filterString); // Log the JSON string
+
+    const events = await this.eventsService.getEventsWithAttendeeCountFiltered(
+      filter,
+    );
     this.logger.debug(`Found ${events.length} events`);
 
     return events;
