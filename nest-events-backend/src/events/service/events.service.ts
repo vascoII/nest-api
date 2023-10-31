@@ -4,7 +4,11 @@ import { Repository, SelectQueryBuilder } from 'typeorm';
 import { Event } from '../entity/event.entity';
 import { AttendeeAnswerEnum } from '../entity/attendee.entity';
 import { ListEvents, WhenEventFilter } from '../dto/list.events';
-import { PaginateOptions, paginate } from '../pagination/paginator';
+import {
+  PaginateOptions,
+  defaultPaginateOptions,
+  paginate,
+} from '../pagination/paginator';
 
 @Injectable()
 export class EventsService {
@@ -109,7 +113,20 @@ export class EventsService {
   ) {
     return await paginate(
       await this.getEventsWithAttendeeCountFiltered(filter),
-      paginateOptions,
+      { ...defaultPaginateOptions, ...paginateOptions }, // This merges the defaults with any provided values,
     );
+  }
+
+  /**
+   * async d
+   * eleteEvent
+   * id: number
+   */
+  public async deleteEvent(id: number) {
+    return await this.eventsRepository
+      .createQueryBuilder('e')
+      .delete()
+      .where('e.id = :id', { id })
+      .execute();
   }
 }
