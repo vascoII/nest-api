@@ -6,13 +6,15 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: ['error', 'warn', 'debug', 'log'],
   });
+
   app.useGlobalPipes(
     new ValidationPipe({
-      transform: true, // Activez la transformation via class-transformer
-      whitelist: true,
-      forbidNonWhitelisted: true,
+      transform: true,
+      whitelist: false,
+      forbidNonWhitelisted: false,
     }),
   );
+
   await app.listen(3000);
 }
 bootstrap();

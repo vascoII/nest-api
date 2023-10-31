@@ -10,6 +10,8 @@ import {
   NotFoundException,
   Logger,
   Query,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { EventIdDto } from './dto/event-id.dto';
 import { EventCreateDto } from './dto/event-create.dto';
@@ -35,15 +37,20 @@ export class EventsController {
   private readonly logger = new Logger(EventsController.name);
 
   @Get()
-  async findall(@Query('when') when: WhenEventFilter) {
-    const filter: ListEvents = { when };
-    const filterString = JSON.stringify(filter); // Convert filter to a JSON string
+  async findAll(@Query() filter: ListEvents) {
+    console.log('Raw Query:', filter);
+    const filterString = JSON.stringify(filter);
     this.logger.log(filterString); // Log the JSON string
 
-    const events = await this.eventsService.getEventsWithAttendeeCountFiltered(
-      filter,
-    );
-    this.logger.debug(`Found ${events.length} events`);
+    const events =
+      await this.eventsService.getEventsWithAttendeeCountFilteredPaginated(
+        filter,
+        {
+          limit: 10,
+          currentPage: filter.page ?? 1,
+          total: true,
+        },
+      );
 
     return events;
   }
