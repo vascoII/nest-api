@@ -1,15 +1,13 @@
-//auth/entity/profile.entity.ts
-
 import {
-  Column,
   Entity,
-  JoinColumn,
-  OneToOne,
   PrimaryGeneratedColumn,
+  Column,
+  OneToOne,
+  JoinColumn,
 } from 'typeorm';
 import { Profile } from './profile.entity';
 
-Entity();
+@Entity()
 export class User {
   @PrimaryGeneratedColumn()
   id: number;

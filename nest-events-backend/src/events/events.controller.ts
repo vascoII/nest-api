@@ -23,8 +23,8 @@ import { SubtractSixMonthsPipe } from './pipe/subtract-six-months.pipe';
 import { Attendee } from './entity/attendee.entity';
 import { EventsService } from './service/events.service';
 import { ListEvents, WhenEventFilter } from './dto/list.events';
-import { User } from 'src/auh/entity/user.entity';
-import { Profile } from 'src/auh/entity/profile.entity';
+import { Profile } from 'src/auth/entity/profile.entity';
+import { User } from 'src/auth/entity/user.entity';
 
 @Controller('/events')
 export class EventsController {

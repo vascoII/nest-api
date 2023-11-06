@@ -4,8 +4,8 @@ import { registerAs } from '@nestjs/config';
 import { Attendee } from 'src/events/entity/attendee.entity';
 import { Subject } from 'rxjs';
 import { Teacher } from 'src/school/teacher.entity';
-import { User } from 'src/auh/entity/user.entity';
-import { Profile } from 'src/auh/entity/profile.entity';
+import { User } from 'src/auth/entity/user.entity';
+import { Profile } from 'src/auth/entity/profile.entity';
 
 export default registerAs(
   'orm.config',
