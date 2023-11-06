@@ -23,6 +23,8 @@ import { SubtractSixMonthsPipe } from './pipe/subtract-six-months.pipe';
 import { Attendee } from './entity/attendee.entity';
 import { EventsService } from './service/events.service';
 import { ListEvents, WhenEventFilter } from './dto/list.events';
+import { User } from 'src/auh/entity/user.entity';
+import { Profile } from 'src/auh/entity/profile.entity';
 
 @Controller('/events')
 export class EventsController {
@@ -31,6 +33,8 @@ export class EventsController {
     private readonly repository: Repository<Event>,
     @InjectRepository(Attendee)
     private readonly attendeeRepository: Repository<Attendee>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
     private readonly eventsService: EventsService,
   ) {}
 
@@ -96,6 +100,22 @@ export class EventsController {
 
     await this.attendeeRepository.save(attendee);
     return event;
+  }
+
+  @Get('/practice3')
+  async pracice3() {
+    const user = new User();
+    user.username = 'username';
+    user.password = 'password';
+    user.email = 'email';
+    user.firstName = 'firstName';
+    user.lastName = 'lastName';
+
+    const profile = new Profile();
+    profile.age = 123;
+    user.profile = profile;
+
+    await this.userRepository.save(user);
   }
 
   @Get(':id')
